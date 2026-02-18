@@ -1,0 +1,63 @@
+services:
+  grpcservicea:
+    build:
+      context: ./gRPCServiceA
+      dockerfile: Dockerfile
+    container_name: grpcservicea
+    restart: always
+    ports:
+      - '8000:80'
+    volumes:
+      - ./gRPCServiceA:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - monorepo
+  grpcserviceb:
+    build:
+      context: ./gRPCServiceB
+      dockerfile: Dockerfile
+    container_name: grpcserviceb
+    restart: always
+    ports:
+      - '8001:80'
+    volumes:
+      - ./gRPCServiceB:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - monorepo
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '3307:3306'
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+      SERVICE_TAG: dev
+      SERVICE_NAME: mysql
+    networks:
+      - monorepo
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - UPLOAD_LIMIT=3000M
+      - MAX_EXECUTION_TIME=0
+    networks:
+      - monorepo
+
+networks:
+  monorepo:
+volumes:
+  mysql:
