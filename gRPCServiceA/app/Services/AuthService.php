@@ -10,11 +10,11 @@ class AuthService
     public function checkTokenIsValid(): bool
     {
         $client = new AuthServiceClient('localhost:50051', [
-            'credentials' => Grpc\ChannelCredentials::createInsecure(),
+            'credentials' => \Grpc\ChannelCredentials::createInsecure(),
         ]);
 
         $authRequest = new AuthRequest();
-        $authRequest->setToken(request()->getAuthToken());
+        $authRequest->setToken(request()->bearerToken());
         list($response, $status) = $client->AuthCheck($authRequest)->wait();
         if ($status->code !== \Grpc\STATUS_OK) {
             return false;
