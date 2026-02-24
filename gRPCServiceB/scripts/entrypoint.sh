@@ -15,7 +15,7 @@ php artisan storage:link
 php artisan migrate --force
 php artisan o:c
 
-service php8.4-fpm restart
+service php8.3-fpm restart
 service supervisor start
 supervisorctl reread
 supervisorctl update

@@ -11,8 +11,6 @@ RUN apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false upd
     unzip \
     autoconf \
     zlib1g-dev \
-    php-dev \
-    php-pear \
     protobuf-compiler \
     libpq-dev \
     libonig-dev \
@@ -26,30 +24,49 @@ RUN apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false upd
     && curl -fsSL https://packages.sury.org/php/apt.gpg | tee /usr/share/keyrings/sury-php.gpg > /dev/null \
     && echo "deb [signed-by=/usr/share/keyrings/sury-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/sury-php.list \
     && apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update && apt-get install -y \
-    php8.4 \
-    php8.4-fpm \
-    php8.4-cli \
-    php8.4-mysql \
-    php8.4-mbstring \
-    php8.4-zip \
-    php8.4-xml \
-    php8.4-curl \
-    php8.4-bcmath \
-    php8.4-soap \
-    php8.4-gd \
-    php8.4-intl \
-    php8.4-dev \
-    php8.4-pdo-mysql \
+    php8.3 \
+    php8.3-fpm \
+    php8.3-cli \
+    php8.3-mysql \
+    php8.3-mbstring \
+    php8.3-zip \
+    php8.3-xml \
+    php8.3-curl \
+    php8.3-bcmath \
+    php8.3-soap \
+    php8.3-gd \
+    php8.3-intl \
+    php8.3-dev \
+    php8.3-pdo-mysql \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    # Install build dependencies for pecl extensions
+    && apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        pkg-config \
+        libssl-dev \
+        re2c \
+        libprotobuf-dev \
+        libgrpc-dev \
+    # Install grpc and protobuf PHP extensions
+    && pecl install grpc protobuf \
+    && echo "extension=grpc.so" > /etc/php/8.3/mods-available/grpc.ini \
+    && echo "extension=protobuf.so" > /etc/php/8.3/mods-available/protobuf.ini \
+    && ln -sf /etc/php/8.3/mods-available/grpc.ini /etc/php/8.3/cli/conf.d/20-grpc.ini \
+    && ln -sf /etc/php/8.3/mods-available/grpc.ini /etc/php/8.3/fpm/conf.d/20-grpc.ini \
+    && ln -sf /etc/php/8.3/mods-available/protobuf.ini /etc/php/8.3/cli/conf.d/20-protobuf.ini \
+    && ln -sf /etc/php/8.3/mods-available/protobuf.ini /etc/php/8.3/fpm/conf.d/20-protobuf.ini \
+    # Remove build dependencies
+    && apt-get purge -y --auto-remove build-essential pkg-config libssl-dev re2c libprotobuf-dev libgrpc-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set PHP configurations
-RUN echo "upload_max_filesize=20M" >> /etc/php/8.4/fpm/php.ini \
-    && echo "post_max_size=30M" >> /etc/php/8.4/fpm/php.ini \
-    && echo "memory_limit=512M" >> /etc/php/8.4/fpm/php.ini \
-    && echo "date.timezone=UTC" >> /etc/php/8.4/fpm/php.ini
+RUN echo "upload_max_filesize=20M" >> /etc/php/8.3/fpm/php.ini \
+    && echo "post_max_size=30M" >> /etc/php/8.3/fpm/php.ini \
+    && echo "memory_limit=512M" >> /etc/php/8.3/fpm/php.ini \
+    && echo "date.timezone=UTC" >> /etc/php/8.3/fpm/php.ini
 
 # Environment variables
-ENV WEB_DOCUMENT_ROOT=/app/public
+ENV WEB_DOCUMENT_ROOT=/var/www/html/public
 ENV APP_ENV=production
 ENV FPM_PM_MAX_CHILDREN=100
 ENV FPM_PM=static
