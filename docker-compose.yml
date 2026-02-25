@@ -27,6 +27,20 @@ services:
       - mysql
     networks:
       - monorepo
+  authservice:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: authservice
+    restart: always
+    ports:
+      - '50051:50051'
+    volumes:
+      - ./auth-service:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - monorepo
   mysql:
     image: mysql:latest
     container_name: mysql

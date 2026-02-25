@@ -23,7 +23,7 @@ class EnsureTokenIsValid
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$this->authService->checkTokenIsValid()) {
+        if (!$request->bearerToken() || !$this->authService->checkTokenIsValid()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         return $next($request);

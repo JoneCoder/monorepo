@@ -4,6 +4,8 @@
 
 cd /var/www/html
 composer install --no-interaction --optimize-autoloader
+cp grpc/grpc_php_plugin /usr/local/bin/
+chmod +x /usr/local/bin/grpc_php_plugin
 
 chmod -R 777 storage/
 chmod -R 775 .env
