@@ -16,7 +16,14 @@ class AuthService
         $authRequest = new AuthRequest();
         $authRequest->setToken(request()->bearerToken());
         list($response, $status) = $client->AuthCheck($authRequest)->wait();
-        if ($status->code !== \Grpc\STATUS_OK) {
+
+        $user = $response->getUser();
+        $id = $user->getId();
+        $name = $user->getName();
+        $email = $user->getEmail();
+        $verifiedAt = $user->getVerifiedAt();
+
+        if ($status->code !== \Grpc\STATUS_OK && !$email) {
             return false;
         }
         return true;
