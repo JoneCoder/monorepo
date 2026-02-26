@@ -29,14 +29,15 @@ services:
       - monorepo
   authservice:
     build:
-      context: ./auth-service
+      context: ./authServiceC
       dockerfile: Dockerfile
     container_name: authservice
     restart: always
     ports:
       - '50051:50051'
+      - '8002:80'
     volumes:
-      - ./auth-service:/var/www/html
+      - ./authServiceC:/var/www/html
     depends_on:
       - mysql
     networks:

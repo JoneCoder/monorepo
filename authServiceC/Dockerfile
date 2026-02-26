@@ -28,12 +28,14 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js (latest LTS) and Yarn
+# Install Node.js (latest LTS) and Yarn, then install protoc-gen-ts_proto globally using yarn and ensure yarn global bin is in PATH
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && apt-get update && apt-get install -y nodejs \
     && npm install -g yarn \
     && node -v \
-    && yarn -v
+    && yarn -v \
+    && yarn global add ts-proto \
+    && export PATH="$PATH:$(yarn global bin)"
 
 # Copy project files and configuration
 COPY . .

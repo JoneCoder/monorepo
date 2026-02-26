@@ -1,16 +1,18 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 
+import * as authServicePb from '../../types/authService.pb';
+
 @Controller()
-export class AuthController {
+export class AuthController implements authServicePb.AuthServiceController {
 
-    @GrpcMethod('AuthService', 'AuthCheck')
-    async authCheck(data: { token: string }) {
-
-        console.log('Token received:', data.token);
+    @GrpcMethod(authServicePb.AUTH_SERVICE_NAME)
+    async authCheck(request: authServicePb.AuthRequest): Promise<authServicePb.AuthResponse> {
+        console.log('Token received:', request.token);
 
         // Example validation logic
-        if (data.token === 'valid-token') {
+        if (request.token === 'sjdkghdsfjkhgkjdfhghksdjgklfdsjglkjdfkghjdf') {
+            console.log('Valid token received');
             return {
                 success: true,
                 message: 'Token is valid',
@@ -18,7 +20,7 @@ export class AuthController {
                     id: '1',
                     name: 'Shariful',
                     email: 'test@example.com',
-                    verified_at: new Date().toISOString(),
+                    verifiedAt: new Date().toISOString(),
                 },
             };
         }
@@ -26,7 +28,7 @@ export class AuthController {
         return {
             success: false,
             message: 'Invalid token',
-            user: null,
+            user: undefined,
         };
     }
 }

@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "generate:proto": "cd src/grpc/protos && find . -type f -name '*.proto' -exec protoc --plugin=protoc-gen-ts_proto=$(which protoc-gen-ts_proto) --ts_proto_out=../../types {} --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb \\;"
+    "generate:proto": "cd src/grpc/protos && find . -type f -name '*.proto' -exec protoc --plugin=protoc-gen-ts_proto=$(which protoc-gen-ts_proto) --ts_proto_out=../../app/types {} --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb \\;"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.3",

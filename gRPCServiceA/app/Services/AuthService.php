@@ -9,7 +9,7 @@ class AuthService
 {
     public function checkTokenIsValid(): bool
     {
-        $client = new AuthServiceClient('localhost:50051', [
+        $client = new AuthServiceClient('authservice:50051', [
             'credentials' => \Grpc\ChannelCredentials::createInsecure(),
         ]);
 
