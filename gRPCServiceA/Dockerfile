@@ -39,7 +39,7 @@ RUN apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false upd
     php8.3-dev \
     php8.3-pdo-mysql \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
-    # Install build dependencies for pecl extensions
+    # Install build dependencies for pecl extensions \
     && apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         pkg-config \
@@ -55,7 +55,7 @@ RUN apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false upd
     && ln -sf /etc/php/8.3/mods-available/grpc.ini /etc/php/8.3/fpm/conf.d/20-grpc.ini \
     && ln -sf /etc/php/8.3/mods-available/protobuf.ini /etc/php/8.3/cli/conf.d/20-protobuf.ini \
     && ln -sf /etc/php/8.3/mods-available/protobuf.ini /etc/php/8.3/fpm/conf.d/20-protobuf.ini \
-    # Remove build dependencies
+    # Remove build dependencies \
     && apt-get purge -y --auto-remove build-essential pkg-config libssl-dev re2c libprotobuf-dev libgrpc-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
