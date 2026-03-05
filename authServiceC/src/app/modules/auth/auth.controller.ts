@@ -1,10 +1,17 @@
-import { Controller } from '@nestjs/common';
+import {Controller, Get, Req} from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 
 import * as authServicePb from '../../types/authService.pb';
 
 @Controller()
 export class AuthController implements authServicePb.AuthServiceController {
+
+    @Get()
+    root(@Req() req: Request) {
+        return {
+            message: 'Auth Service is running',
+        }
+    }
 
     @GrpcMethod(authServicePb.AUTH_SERVICE_NAME)
     async authCheck(request: authServicePb.AuthRequest): Promise<authServicePb.AuthResponse> {
