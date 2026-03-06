@@ -1,0 +1,22 @@
+version: '3'
+grpc:
+  listen: 'tcp://0.0.0.0:9001'
+  proto:
+    - "proto/service.proto"
+
+server:
+  command: 'php vendor/bin/rr-worker start'
+
+http:
+  address: 0.0.0.0:8080
+  middleware: [ "static", "headers", "gzip" ]
+  pool:
+    #max_jobs: 64 # feel free to change this
+    supervisor:
+      exec_ttl: 60s
+  headers:
+    response:
+      X-Powered-By: "RoadRunner"
+  static:
+    dir: "public"
+    forbid: [ ".php" ]
