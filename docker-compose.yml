@@ -21,6 +21,7 @@ services:
     restart: always
     ports:
       - '8001:80'
+      - '50052:9001'
     volumes:
       - ./gRPCServiceB:/var/www/html
     depends_on:

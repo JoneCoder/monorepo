@@ -17,8 +17,9 @@ php artisan o:c
 
 service php8.3-fpm restart
 service supervisor start
+service nginx start
 supervisorctl reread
 supervisorctl update
 supervisorctl start all
 
-exec nginx -g "daemon off;"
+./rr serve

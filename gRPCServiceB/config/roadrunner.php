@@ -15,7 +15,7 @@ return [
     ],
 
     'grpc' => [
-        'services' => [
+        /*'services' => [
             // Simple service configuration
             \App\GRPC\EchoServiceInterface::class => \App\GRPC\EchoService::class,
 
@@ -28,11 +28,25 @@ return [
                 ],
             ],
         ],
+
+        'clients' => [
+            'services' => [
+                [
+                    'connection' => '127.0.0.1:9001', // gRPC server address
+                    'interfaces' => [
+                        \App\Grpc\EchoServiceInterface::class,
+                    ],
+                    // 'tls' => [ ... ] // Optional TLS configuration
+                ],
+            ],
+            // 'interceptors' => [ ... ] // Optional interceptors
+        ],
+
         // Global interceptors - applied to all services
         'interceptors' => [
             \App\GRPC\Interceptors\LoggingInterceptor::class,
             \App\GRPC\Interceptors\AuthenticationInterceptor::class,
-        ],
+        ],*/
     ],
 
     'temporal' => [
